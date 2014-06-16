@@ -1,5 +1,6 @@
 import re
 import logging
+import socket
 
 from pylons import config
 from solr import SolrException
@@ -275,6 +276,9 @@ class PackageSearchQuery(SearchQuery):
         except SolrException, e:
             raise SearchError('SOLR returned an error running query: %r Error: %r' %
                               (query, e.reason))
+        except socket.error:
+            raise SearchError('Error connecting to SOLR server')
+
         try:
             data = json.loads(solr_response)
 
