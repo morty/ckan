@@ -29,6 +29,7 @@ psycopg2==2.4.5
 python-dateutil==1.5
 python-openid==2.2.5
 pyutilib.component.core==4.5.3
+raven==5.0.0
 repoze.lru==0.6
 repoze.who==1.0.19
 repoze.who-friendlyform==1.0.8

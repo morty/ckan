@@ -20,6 +20,7 @@ from repoze.who.config import WhoConfig
 from repoze.who.middleware import PluggableAuthenticationMiddleware
 from repoze.who.plugins.auth_tkt import make_plugin as auth_tkt_make_plugin
 from fanstatic import Fanstatic
+from raven.contrib.pylons import Sentry
 
 from ckan.plugins import PluginImplementations
 from ckan.plugins.interfaces import IMiddleware
@@ -93,6 +94,8 @@ def make_app(conf, full_stack=True, static_files=True, **app_conf):
             'bundle': True,
         }
     app = Fanstatic(app, **fanstatic_config)
+
+    app = Sentry(app, config)
 
     if asbool(full_stack):
         # Handle Python exceptions
