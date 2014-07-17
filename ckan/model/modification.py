@@ -31,7 +31,7 @@ class DomainObjectModificationExtension(plugins.SingletonPlugin):
             func(observer)
 
 
-    def after_commit(self, session):
+    def before_commit(self, session):
 
         session.flush()
         if not hasattr(session, '_object_cache'):
