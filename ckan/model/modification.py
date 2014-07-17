@@ -32,7 +32,12 @@ class DomainObjectModificationExtension(plugins.SingletonPlugin):
 
 
     def before_commit(self, session):
+        self.notify_observers(session, self.notify)
 
+    def after_commit(self, session):
+        self.notify_observers(session, self.notify_after_commit)
+
+    def notify_observers(self, session, method):
         session.flush()
         if not hasattr(session, '_object_cache'):
             return
@@ -77,6 +82,17 @@ class DomainObjectModificationExtension(plugins.SingletonPlugin):
                 plugins.IDomainObjectModification):
             try:
                 observer.notify(entity, operation)
+            except Exception, ex:
+                log.exception(ex)
+                # We reraise all exceptions so they are obvious there
+                # is something wrong
+                raise
+
+    def notify_after_commit(self, entity, operation):
+        for observer in plugins.PluginImplementations(
+                plugins.IDomainObjectModification):
+            try:
+                observer.notify_after_commit(entity, operation)
             except Exception, ex:
                 log.exception(ex)
                 # We reraise all exceptions so they are obvious there
