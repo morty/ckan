@@ -179,7 +179,7 @@ class PackageController(base.BaseController):
             c.sort_by_fields = [field.split()[0]
                                 for field in sort_by.split(',')]
 
-        def pager_url(page):
+        def pager_url(page, q=None):
             params = list(params_nopage)
             params.append(('page', page))
             return search_url(params, package_type)
